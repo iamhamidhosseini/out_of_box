@@ -1,0 +1,46 @@
+:root {
+  --color-bg-light: #f4f7fb;
+  --color-surface-light: #ffffff;
+  --color-primary: #1e90ff;    /* آبی */
+  --color-primary-soft: #e3f2ff;
+  --color-accent: #00c853;     /* سبز */
+  --color-accent-soft: #e6f9ee;
+  --color-danger: #ff5252;     /* قرمز */
+  --color-warning: #ffca28;    /* زرد */
+  --color-text-main: #1b2733;
+  --color-text-soft: #5f6c80;
+  --color-border: #dde3ee;
+
+  --radius-lg: 16px;
+  --radius-md: 12px;
+  --radius-sm: 8px;
+
+  --shadow-soft: 0 12px 24px rgba(15, 23, 42, 0.08);
+  --transition-fast: 0.2s ease-out;
+  --transition-med: 0.3s ease-out;
+
+  --font-family-main: "Vazirmatn", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  --chat-bubble-user: #1e90ff;
+  --chat-bubble-coach: #00c853;
+}
+
+/* Dark theme */
+body.theme-dark {
+  --color-bg-light: #050816;
+  --color-surface-light: #0b1120;
+  --color-primary: #4f46e5;        /* آبی متمایل به بنفش */
+  --color-primary-soft: #1e293b;
+  --color-accent: #22c55e;         /* سبز */
+  --color-accent-soft: #064e3b;
+  --color-danger: #f97373;         /* قرمز روشن */
+  --color-warning: #fbbf24;        /* زرد تیره */
+  --color-text-main: #e5e7eb;
+  --color-text-soft: #9ca3af;
+  --color-border: #1f2937;
+
+  --shadow-soft: 0 18px 40px rgba(0, 0, 0, 0.6);
+
+  --chat-bubble-user: #4f46e5;
+  --chat-bubble-coach: #22c55e;
+}
