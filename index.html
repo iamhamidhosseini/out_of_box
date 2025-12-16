@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>Out of Box - ورزش برای همه</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- فونت ساده (می‌تونی بعداً عوضش کنی) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;700&display=swap" rel="stylesheet" />
+
+  <!-- CSS ها -->
+  <link rel="stylesheet" href="assets/css/reset.css" />
+  <link rel="stylesheet" href="assets/css/theme.css" />
+  <link rel="stylesheet" href="assets/css/layout.css" />
+
+  <!-- Chart.js از CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="theme-light">
+  <header class="app-header" aria-label="نوار بالای برنامه">
+    <div class="header-left">
+      <h1 class="logo" tabindex="0">Out of Box</h1>
+      <span class="logo-subtitle">ورزش برای همه، مخصوص توان‌یابان</span>
+    </div>
+
+    <nav class="main-nav" aria-label="منوی اصلی">
+      <button class="nav-link" data-section="dashboard">داشبورد</button>
+      <button class="nav-link" data-section="coach-chat">چت با مربی</button>
+      <button class="nav-link" data-section="videos">ویدیوهای آموزشی</button>
+      <button class="nav-link" data-section="public-chat">چت عمومی و اخبار</button>
+    </nav>
+
+    <div class="header-right">
+      <button id="themeToggle" class="theme-toggle" aria-label="تغییر حالت تاریک و روشن">
+        🌓
+      </button>
+    </div>
+  </header>
+
+  <!-- اسلایدر ایونت‌ها -->
+  <section class="events-section" aria-label="ایونت‌های ورزشی">
+    <div class="events-carousel">
+      <button class="carousel-control prev" aria-label="ایونت قبلی">&#10094;</button>
+      <div class="carousel-window">
+        <div class="carousel-track" id="eventTrack">
+          <!-- این اسلایدها با JS پر می‌شوند بر اساس eventImages -->
+        </div>
+      </div>
+      <button class="carousel-control next" aria-label="ایونت بعدی">&#10095;</button>
+    </div>
+  </section>
+
+  <main class="app-main">
+    <!-- داشبورد -->
+    <section id="dashboard" class="page-section is-active" aria-label="داشبورد فعالیت">
+      <div class="cards-grid">
+        <article class="stat-card primary">
+          <h2>هدف امروز</h2>
+          <p class="stat-value"><span id="todayGoalValue">60</span> دقیقه</p>
+          <p class="stat-subtitle">مجموع فعالیت پیشنهادی</p>
+        </article>
+
+        <article class="stat-card success">
+          <h2>فعالیت انجام‌شده امروز</h2>
+          <p class="stat-value"><span id="todayProgressValue">35</span> دقیقه</p>
+          <p class="stat-subtitle">
+            <span id="todayPercent">58</span>% از هدف امروز
+          </p>
+          <div class="progress-bar" aria-label="پیشرفت امروز">
+            <div id="todayProgressBar" class="progress-fill"></div>
+          </div>
+        </article>
+
+        <article class="stat-card warning">
+          <h2>رکورد متوالی</h2>
+          <p class="stat-value"><span id="streakDays">4</span> روز</p>
+          <p class="stat-subtitle">روزهای پشت‌سرهم فعال</p>
+        </article>
+
+        <article class="stat-card info">
+          <h2>امتیاز انگیزشی</h2>
+          <p class="stat-value"><span id="motivationScore">82</span>/100</p>
+          <p class="stat-subtitle">عالی! همین‌طور ادامه بده 🌟</p>
+        </article>
+      </div>
+
+      <div class="charts-wrapper">
+        <div class="chart-card">
+          <div class="chart-header">
+            <h3>فعالیت روزانه (امروز)</h3>
+            <span class="chart-subtitle">تقسیم در طول روز</span>
+          </div>
+          <canvas id="dailyChart" aria-label="نمودار فعالیت روزانه"></canvas>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-header tabs">
+            <h3>گزارش هفتگی / ماهانه</h3>
+            <div class="tab-buttons" role="tablist">
+              <button class="tab-button is-active" data-range="week" role="tab">هفتگی</button>
+              <button class="tab-button" data-range="month" role="tab">ماهانه</button>
+            </div>
+          </div>
+          <canvas id="rangeChart" aria-label="نمودار هفتگی و ماهانه"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- چت با مربی -->
+    <section id="coach-chat" class="page-section" aria-label="چت با مربی">
+      <div class="chat-container">
+        <header class="chat-header">
+          <h2>گفت‌وگو با مربی اختصاصی</h2>
+          <span class="chat-status">آنلاین • پاسخ تقریبی: کمتر از ۲۴ ساعت</span>
+        </header>
+
+        <div id="coachMessages" class="chat-messages" aria-live="polite">
+          <!-- پیام‌های نمونه اولیه -->
+        </div>
+
+        <form id="coachForm" class="chat-form" aria-label="فرم ارسال پیام برای مربی">
+          <label for="coachInput" class="sr-only">پیام برای مربی</label>
+          <textarea id="coachInput" rows="3" placeholder="سوالت را از مربی بپرس..." required></textarea>
+          <button type="submit" class="btn primary">ارسال پیام</button>
+        </form>
+        <p class="chat-note">
+          * توجه: در این نسخه‌ی دمو، پیام‌ها فقط در مرورگر شما ذخیره می‌شوند و ارسال واقعی به سرور ندارند.
+        </p>
+      </div>
+    </section>
+
+    <!-- ویدیوهای آموزشی -->
+    <section id="videos" class="page-section" aria-label="ویدیوهای آموزشی">
+      <h2>ویدیوهای پیشنهادی برای توان‌یابان</h2>
+      <div class="video-grid">
+        <article class="video-card">
+          <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg" alt="تمرین نشسته برای تقویت بالاتنه" />
+          <div class="video-body">
+            <h3>تمرین نشسته برای تقویت بالاتنه</h3>
+            <p>حرکات ملایم و مناسب برای افراد روی ویلچر یا با محدودیت حرکتی پا.</p>
+            <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" rel="noopener" class="btn secondary">
+              مشاهده ویدیو
+            </a>
+          </div>
+        </article>
+
+        <article class="video-card">
+          <img src="https://img.youtube.com/vi/oHg5SJYRHA0/maxresdefault.jpg" alt="کشش ملایم برای کاهش درد عضلات" />
+          <div class="video-body">
+            <h3>کشش ملایم برای کاهش درد عضلات</h3>
+            <p>مجموعه‌ای از کشش‌های کوتاه با تمرکز روی مفاصل حساس.</p>
+            <a href="https://www.youtube.com/watch?v=oHg5SJYRHA0" target="_blank" rel="noopener" class="btn secondary">
+              مشاهده ویدیو
+            </a>
+          </div>
+        </article>
+
+        <!-- می‌تونی کارت‌های بیشتری اضافه کنی -->
+      </div>
+    </section>
+
+    <!-- چت عمومی و اخبار ورزشی -->
+    <section id="public-chat" class="page-section" aria-label="چت عمومی و اخبار">
+      <div class="public-layout">
+        <div class="chat-container">
+          <header class="chat-header">
+            <h2>چت عمومی</h2>
+            <span class="chat-status">جامعه‌ی Out of Box</span>
+          </header>
+          <div id="publicMessages" class="chat-messages" aria-live="polite">
+            <!-- پیام‌های نمونه اولیه -->
+          </div>
+          <form id="publicForm" class="chat-form" aria-label="فرم ارسال پیام عمومی">
+            <label for="publicInput" class="sr-only">پیام عمومی</label>
+            <textarea id="publicInput" rows="2" placeholder="تجربه‌ات را با بقیه به اشتراک بگذار..." required></textarea>
+            <button type="submit" class="btn primary">ارسال به چت عمومی</button>
+          </form>
+        </div>
+
+        <aside class="news-panel" aria-label="اخبار ورزشی">
+          <h3>اخبار ورزشی منتخب</h3>
+          <ul class="news-list">
+            <li>
+              <h4>مسابقات پارالمپیک منطقه‌ای</h4>
+              <p>ثبت‌نام برای شرکت در مسابقات پارالمپیک منطقه‌ای آغاز شد. فرصت خوبی برای توان‌یابان ورزشکار.</p>
+              <span class="news-tag">ایونت</span>
+            </li>
+            <li>
+              <h4>وبینار تغذیه برای ورزشکاران</h4>
+              <p>یک وبینار رایگان درباره تغذیه‌ی مناسب قبل و بعد تمرین برای افراد با محدودیت حرکتی.</p>
+              <span class="news-tag info">آموزشی</span>
+            </li>
+            <li>
+              <h4>چالش ۳۰ روزه‌ی حرکت</h4>
+              <p>چالش گروهی با تمرین‌های روزانه سبک؛ مناسب برای شروع‌کنندگان.</p>
+              <span class="news-tag success">چالش</span>
+            </li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <p>ساخته شده با ❤️ برای توان‌یابان · Out of Box</p>
+  </footer>
+
+  <!-- JS ها -->
+  <script src="assets/js/mockData.js"></script>
+  <script src="assets/js/charts.js"></script>
+  <script src="assets/js/carousel.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
