@@ -1415,116 +1415,6 @@
             color: #333;
         }
         
-        /* منوی همبرگری */
-        .hamburger-menu {
-            display: none;
-            background: none;
-            border: none;
-            color: var(--text-light);
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: 10px;
-            border-radius: 8px;
-            transition: var(--transition);
-        }
-
-        .light-theme .hamburger-menu {
-            color: #333;
-        }
-
-        .hamburger-menu:hover {
-            background: rgba(106, 17, 203, 0.2);
-        }
-
-        /* منوی موبایل */
-        .mobile-nav-overlay {
-            position: fixed;
-            top: 0;
-            right: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 1999;
-            display: none;
-            backdrop-filter: blur(5px);
-        }
-
-        .mobile-nav-overlay.active {
-            display: block;
-        }
-
-        .mobile-nav {
-            position: fixed;
-            top: 0;
-            right: -100%;
-            width: 80%;
-            max-width: 300px;
-            height: 100vh;
-            background: var(--nav-bg);
-            backdrop-filter: blur(20px);
-            z-index: 2000;
-            transition: right 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
-            padding: 80px 30px 30px;
-            overflow-y: auto;
-            box-shadow: -10px 0 40px rgba(0, 0, 0, 0.5);
-        }
-
-        .mobile-nav.active {
-            right: 0;
-        }
-
-        .mobile-nav-close {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: var(--accent-red);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            cursor: pointer;
-        }
-
-        .mobile-nav-links {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .mobile-nav-link {
-            padding: 18px 20px;
-            color: var(--text-light);
-            text-decoration: none;
-            font-size: 1.1rem;
-            border-radius: 12px;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            border-right: 4px solid transparent;
-        }
-
-        .light-theme .mobile-nav-link {
-            color: #333;
-        }
-
-        .mobile-nav-link:hover, .mobile-nav-link.active {
-            background: rgba(106, 17, 203, 0.2);
-            border-right-color: var(--accent-purple);
-            transform: translateX(-5px);
-        }
-
-        .mobile-nav-link i {
-            width: 25px;
-            text-align: center;
-            font-size: 1.2rem;
-            color: var(--accent-purple);
-        }
         .message-time {
             font-size: 0.8rem;
             opacity: 0.7;
@@ -2112,6 +2002,39 @@
         .light-theme .milestone.locked {
             background: rgba(0, 0, 0, 0.05);
         }
+        /* دکمه بازگشت به بالا */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(100px);
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(106, 17, 203, 0.4);
+        }
+
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(106, 17, 203, 0.6);
+        }
         
         /* پاپ‌آپ نوتیفیکیشن */
         .notification {
@@ -2137,6 +2060,25 @@
             font-size: 1.5rem;
             margin-left: 15px;
         }
+
+        /* استایل‌های مربوط به مخفی شدن هدر هنگام اسکرول */
+        header {
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        header.hidden {
+            transform: translateY(-100%);
+            opacity: 0;
+            box-shadow: none;
+        }
+
+        header.scrolling-up {
+            transform: translateY(0);
+            opacity: 1;
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
+        }
         
         /* ریسپانسیو */
         @media (max-width: 1200px) {
@@ -2150,16 +2092,15 @@
         }
         
         @media (max-width: 992px) {
-            .hamburger-menu {
-                    display: block;
-                }
-                
-            .nav-links {
-                display: none; /* مخفی کردن منوی اصلی در موبایل */
-            }
-
             .header-content {
                 flex-direction: column;
+                gap: 20px;
+            }
+            
+            .nav-links {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
                 gap: 20px;
             }
             
@@ -2266,35 +2207,6 @@
         }
         
         @media (max-width: 576px) {
-
-            .btn {
-                padding: 14px 16px !important;
-                font-size: 0.95rem !important;
-                width: 100%;
-                margin-bottom: 10px;
-            }
-
-            .form-group .btn {
-                width: 100%;
-            }
-            
-            /* برای دکمه‌های action */
-            .action-buttons {
-                flex-direction: column;
-            }
-            
-            .action-buttons .btn {
-                width: 100%;
-                margin-bottom: 10px;
-            }
-            
-            /* برای دکمه‌های کوچک */
-            .action-btn {
-                padding: 8px 12px;
-                font-size: 0.9rem;
-                margin: 3px;
-            }
-
             .auth-box {
                 padding: 30px 20px;
             }
@@ -2612,6 +2524,9 @@
     </style>
 </head>
 <body>
+    <div class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </div>
     <!-- صفحه ورود/ثبت‌نام جذاب‌تر -->
     <div id="auth-page" class="auth-container">
         <div class="auth-background">
@@ -2625,9 +2540,8 @@
         
         <div class="auth-box">
             <div class="logo">
-                <button class="hamburger-menu" id="hamburger-menu">
-                    <i class="fas fa-bars"></i>
-                </button>
+                <i class="fas fa-running"></i>
+                <span>Track</span>
             </div>
             
             <div class="auth-form">
@@ -2684,22 +2598,10 @@
         <header>
             <div class="container header-content">
                 <div class="logo">
-                    <button class="hamburger-menu" id="coach-hamburger-menu">
-                        <i class="fas fa-bars"></i>
-                    </button>
+                    <i class="fas fa-running"></i>
+                    <span>Track</span>
                 </div>
-
-                <!-- منوی موبایل -->
-                <div class="mobile-nav-overlay" id="user-mobile-overlay"></div>
-                <div class="mobile-nav" id="user-mobile-nav">
-                    <button class="mobile-nav-close" id="user-mobile-close">
-                        <i class="fas fa-times"></i>
-                    </button>
-                    <div class="mobile-nav-links" id="user-mobile-links">
-                        <!-- لینک‌ها توسط جاوااسکریپت پر می‌شوند -->
-                    </div>
-                </div>
-
+                
                 <nav class="nav-links">
                     <a href="#" class="nav-link" data-page="user-welcome">خوش آمدید</a>
                     <a href="#" class="nav-link active" data-page="user-dashboard">داشبورد</a>
@@ -3159,7 +3061,7 @@
                     <div class="profile-sidebar">
                         <div class="card profile-card">
                             <div class="profile-avatar">
-                                <img id="profile-avatar-img" src="" alt="User Avatar">
+                                <img id="profile-avatar-img" src="https://randomuser.me/api/portraits/men/32.jpg" alt="User Avatar">
                             </div>
                             <h3 id="profile-name">کاربر</h3>
                             <p id="profile-level">کاربر سطح ۱ - سیاره سبز</p>
@@ -3230,23 +3132,10 @@
         <header>
             <div class="container header-content">
                 <div class="logo">
-                    <button class="hamburger-menu" id="hamburger-menu">
-                        <i class="fas fa-bars"></i>
-                    </button>
+                    <i class="fas fa-running"></i>
                     <span>Track - پنل مربی</span>
                 </div>
                 
-                <!-- منوی موبایل مربی -->
-                <div class="mobile-nav-overlay" id="coach-mobile-overlay"></div>
-                <div class="mobile-nav" id="coach-mobile-nav">
-                    <button class="mobile-nav-close" id="coach-mobile-close">
-                        <i class="fas fa-times"></i>
-                    </button>
-                    <div class="mobile-nav-links" id="coach-mobile-links">
-                        <!-- لینک‌ها توسط جاوااسکریپت پر می‌شوند -->
-                    </div>
-                </div>
-
                 <nav class="nav-links">
                     <a href="#" class="nav-link active" data-page="coach-dashboard">داشبورد مربی</a>
                     <a href="#" class="nav-link" data-page="coach-students">شاگردان</a>
@@ -3969,23 +3858,10 @@
         <header>
             <div class="container header-content">
                 <div class="logo">
-                        <button class="hamburger-menu" id="hamburger-menu">
-                            <i class="fas fa-bars"></i>
-                        </button>
+                    <i class="fas fa-running"></i>
                     <span>Track - پنل مدیریت</span>
                 </div>
                 
-                <!-- منوی موبایل ادمین -->
-                <div class="mobile-nav-overlay" id="admin-mobile-overlay"></div>
-                <div class="mobile-nav" id="admin-mobile-nav">
-                    <button class="mobile-nav-close" id="admin-mobile-close">
-                        <i class="fas fa-times"></i>
-                    </button>
-                    <div class="mobile-nav-links" id="admin-mobile-links">
-                        <!-- لینک‌ها توسط جاوااسکریپت پر می‌شوند -->
-                    </div>
-                </div>
-
                 <nav class="nav-links">
                     <a href="#" class="nav-link active" data-page="admin-dashboard">داشبورد مدیریت</a>
                     <a href="#" class="nav-link" data-page="admin-users">مدیریت کاربران</a>
@@ -6606,7 +6482,82 @@
                     }
                 });
             });
-            setupMobileMenu();
+
+            // کنترل مخفی شدن هدر هنگام اسکرول
+            let lastScrollTop = 0;
+            let isHeaderVisible = true;
+            const header = document.querySelector('header');
+            const scrollThreshold = 50; // حداقل میزان اسکرول برای مخفی کردن
+
+            function handleScroll() {
+                const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+                
+                if (!header) return;
+                
+                // اگر اسکرول به پایین است و از حد آستانه بیشتر شده
+                if (currentScroll > lastScrollTop && currentScroll > scrollThreshold) {
+                    // هدر را مخفی کن
+                    if (isHeaderVisible) {
+                        header.classList.add('hidden');
+                        header.classList.remove('scrolling-up');
+                        isHeaderVisible = false;
+                    }
+                } 
+                // اگر اسکرول به بالا است
+                else if (currentScroll < lastScrollTop) {
+                    // هدر را نشان بده
+                    if (!isHeaderVisible) {
+                        header.classList.remove('hidden');
+                        header.classList.add('scrolling-up');
+                        isHeaderVisible = true;
+                    }
+                }
+                
+                // اگر در بالای صفحه هستیم
+                if (currentScroll <= scrollThreshold) {
+                    header.classList.remove('hidden');
+                    header.classList.add('scrolling-up');
+                    isHeaderVisible = true;
+                }
+                
+                lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+            }
+
+            // اضافه کردن event listener برای اسکرول
+            window.addEventListener('scroll', handleScroll);
+
+            // برای جلوگیری از مخفی شدن هدر هنگام hover
+            if (header) {
+                header.addEventListener('mouseenter', function() {
+                    if (!isHeaderVisible) {
+                        header.classList.remove('hidden');
+                        header.classList.add('scrolling-up');
+                        isHeaderVisible = true;
+                    }
+                });
+            }
+
+            // دکمه بازگشت به بالا
+            const backToTopBtn = document.getElementById('backToTop');
+            if (backToTopBtn) {
+                // نمایش/مخفی کردن دکمه
+                window.addEventListener('scroll', function() {
+                    if (window.pageYOffset > 300) {
+                        backToTopBtn.classList.add('show');
+                    } else {
+                        backToTopBtn.classList.remove('show');
+                    }
+                });
+                
+                // عملکرد دکمه
+                backToTopBtn.addEventListener('click', function() {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                });
+            }
+
         }
         
         // توابع عمومی برای استفاده در HTML
@@ -6630,84 +6581,6 @@
                 document.getElementById('auth-button').click();
             }
         });
-
-        // مدیریت منوی موبایل
-        function setupMobileMenu() {
-            const portals = ['user', 'coach', 'admin'];
-            
-            portals.forEach(portal => {
-                const portalElement = document.getElementById(`${portal}-portal`);
-                if (portalElement) {
-                    // پر کردن لینک‌های منوی موبایل
-                    const navLinks = portalElement.querySelectorAll('.nav-link');
-                    const mobileLinksContainer = document.getElementById(`${portal}-mobile-links`);
-                    
-                    if (mobileLinksContainer && navLinks.length > 0) {
-                        mobileLinksContainer.innerHTML = '';
-                        navLinks.forEach(link => {
-                            const pageId = link.getAttribute('data-page');
-                            const text = link.textContent;
-                            const icon = link.querySelector('i') ? link.querySelector('i').className : 'fas fa-circle';
-                            
-                            const mobileLink = document.createElement('a');
-                            mobileLink.className = 'mobile-nav-link';
-                            mobileLink.href = '#';
-                            mobileLink.innerHTML = `<i class="${icon}"></i> ${text}`;
-                            mobileLink.setAttribute('data-page', pageId);
-                            
-                            mobileLink.addEventListener('click', function(e) {
-                                e.preventDefault();
-                                showPage(pageId);
-                                closeMobileMenu(portal);
-                            });
-                            
-                            mobileLinksContainer.appendChild(mobileLink);
-                        });
-                    }
-                    
-                    // رویدادهای باز و بستن منو
-                    const hamburgerBtn = document.getElementById(`${portal === 'user' ? '' : portal + '-'}hamburger-menu`);
-                    const mobileOverlay = document.getElementById(`${portal}-mobile-overlay`);
-                    const mobileNav = document.getElementById(`${portal}-mobile-nav`);
-                    const mobileClose = document.getElementById(`${portal}-mobile-close`);
-                    
-                    if (hamburgerBtn) {
-                        hamburgerBtn.addEventListener('click', () => openMobileMenu(portal));
-                    }
-                    
-                    if (mobileOverlay) {
-                        mobileOverlay.addEventListener('click', () => closeMobileMenu(portal));
-                    }
-                    
-                    if (mobileClose) {
-                        mobileClose.addEventListener('click', () => closeMobileMenu(portal));
-                    }
-                }
-            });
-        }
-
-        function openMobileMenu(portal) {
-            const mobileNav = document.getElementById(`${portal}-mobile-nav`);
-            const mobileOverlay = document.getElementById(`${portal}-mobile-overlay`);
-            
-            if (mobileNav) mobileNav.classList.add('active');
-            if (mobileOverlay) mobileOverlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeMobileMenu(portal) {
-            const mobileNav = document.getElementById(`${portal}-mobile-nav`);
-            const mobileOverlay = document.getElementById(`${portal}-mobile-overlay`);
-            
-            if (mobileNav) mobileNav.classList.remove('active');
-            if (mobileOverlay) mobileOverlay.classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
-
-        // در تابع setupEventListeners() فراخوانی کن
-        // در خط 2132 بعد از setupEventListeners() اضافه کن:
-        setupMobileMenu();
-
     </script>
 </body>
 </html>
