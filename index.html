@@ -408,15 +408,12 @@
         
         /* هدر */
         header {
-            background: var(--nav-bg);
-            backdrop-filter: blur(15px);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
-            padding: 15px 0;
-            border-bottom: 2px solid rgba(106, 17, 203, 0.3);
-            transition: var(--transition);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateY(0);
+        }
+
+        header.hidden {
+            transform: translateY(-100%);
         }
         
         .light-theme header {
@@ -6581,6 +6578,115 @@
                 document.getElementById('auth-button').click();
             }
         });
+        
+        // کنترل اسکرول هدر - نسخه بهبود یافته برای موبایل
+        let lastScrollTop = 0;
+        let ticking = false;
+        const header = document.querySelector('header');
+        const SCROLL_THRESHOLD = 150; // افزایش threshold برای موبایل
+        let headerHidden = false;
+
+        // برای موبایل، ساده‌تر عمل می‌کنیم
+        function handleScrollMobile() {
+            const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (!header) return;
+            
+            // فقط اگر تغییر قابل توجهی داشتیم (برای جلوگیری از نوسان)
+            if (Math.abs(currentScroll - lastScrollTop) < 10) {
+                lastScrollTop = Math.max(currentScroll, 0);
+                return;
+            }
+            
+            // مخفی کردن تنها زمانی که به اندازه کافی پایین اسکرول کرده باشیم
+            if (currentScroll > lastScrollTop && currentScroll > SCROLL_THRESHOLD) {
+                if (!headerHidden) {
+                    header.classList.add('hidden');
+                    headerHidden = true;
+                }
+            } 
+            // نشان دادن تنها زمانی که نزدیک بالای صفحه باشیم
+            else if (currentScroll < lastScrollTop && currentScroll < 50) {
+                if (headerHidden) {
+                    header.classList.remove('hidden');
+                    headerHidden = false;
+                }
+            }
+            
+            lastScrollTop = Math.max(currentScroll, 0);
+        }
+
+        // نسخه ساده‌تر و پایدارتر
+        function setupHeaderScroll() {
+            if (!header) return;
+            
+            let lastKnownScrollPosition = 0;
+            let isScrolling = false;
+            
+            // با تاخیر برای عملکرد بهتر
+            function throttledUpdate() {
+                const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+                
+                // حالت ساده: اگر پایین اسکرول کردیم و از آستانه گذشتیم
+                if (currentScroll > lastKnownScrollPosition && currentScroll > 200) {
+                    if (!header.classList.contains('hidden')) {
+                        header.classList.add('hidden');
+                    }
+                }
+                // اگر بالا اسکرول کردیم و به بالای صفحه نزدیک شدیم
+                else if (currentScroll < 100) {
+                    if (header.classList.contains('hidden')) {
+                        header.classList.remove('hidden');
+                    }
+                }
+                
+                lastKnownScrollPosition = currentScroll;
+            }
+            
+            // استفاده از requestAnimationFrame برای عملکرد بهتر
+            function onScroll() {
+                if (!ticking) {
+                    requestAnimationFrame(() => {
+                        throttledUpdate();
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            }
+            
+            // تشخیص دستگاه موبایل
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            
+            if (isMobile) {
+                // برای موبایل از راه‌حل ساده‌تر استفاده می‌کنیم
+                let scrollTimeout;
+                
+                window.addEventListener('scroll', () => {
+                    clearTimeout(scrollTimeout);
+                    
+                    scrollTimeout = setTimeout(() => {
+                        const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+                        
+                        // حالت بسیار ساده برای موبایل
+                        if (scrollY > 200) {
+                            header.classList.add('hidden');
+                        } else {
+                            header.classList.remove('hidden');
+                        }
+                    }, 150); // تاخیر بیشتر برای موبایل
+                });
+            } else {
+                // برای دسکتاپ از راه‌حل دقیق‌تر
+                window.addEventListener('scroll', onScroll, { passive: true });
+            }
+            
+            // برای اطمینان، وقتی صفحه لود شد هدر را نشان بده
+            window.addEventListener('load', () => {
+                header.classList.remove('hidden');
+            });
+        }
+        setupHeaderScroll();
+
     </script>
 </body>
 </html>
